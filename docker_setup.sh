@@ -47,6 +47,7 @@ function BUILD_IMAGE() {
 function start_image()
 {
     image_tag=limo_ros2:dev
+    image_tag=limo_ros2:dev
     if [ $# -gt 1 ] 
     then
         image_tag=$1
