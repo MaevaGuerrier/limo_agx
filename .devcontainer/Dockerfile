@@ -2,10 +2,6 @@ FROM ros:foxy as dev
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# For Chinese mainland user.
-# RUN  sed -i "s/ports.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
-# RUN  sed -i "s/archive.ubuntu.com/mirrors.ustc.edu.cn/g" /etc/apt/sources.list
-
 # Builder dependencies installation
 RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
@@ -30,7 +26,7 @@ RUN apt-get update \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://ghproxy.com/https://github.com/YDLIDAR/YDLidar-SDK.git &&\
+RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
     mkdir -p YDLidar-SDK/build && \
     cd YDLidar-SDK/build &&\
     cmake ..&&\
@@ -42,17 +38,14 @@ RUN git clone https://ghproxy.com/https://github.com/YDLIDAR/YDLidar-SDK.git &&\
 
 RUN echo "source /opt/ros/foxy/setup.bash" >> /etc/bash.bashrc
 
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+   && apt-get -y install --no-install-recommends  ros-foxy-xacro ros-foxy-gazebo-ros ros-foxy-rviz2 ros-foxy-joint-state-publisher-gui\
+   #
+   # Clean up
+   && apt-get autoremove -y \
+   && apt-get clean -y \
+   && rm -rf /var/lib/apt/lists/*
+ENV DEBIAN_FRONTEND=dialog
 
-# ** [可选] 取消注释安装其他组件 **
-#
-# ENV DEBIAN_FRONTEND=noninteractive
-# RUN apt-get update \
-#    && apt-get -y install --no-install-recommends <your-package-list-here> \
-#    #
-#    # Clean up
-#    && apt-get autoremove -y \
-#    && apt-get clean -y \
-#    && rm -rf /var/lib/apt/lists/*
-# ENV DEBIAN_FRONTEND=dialog
-
-# 配置自动 source
+配置自动 source
