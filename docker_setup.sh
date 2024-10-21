@@ -31,7 +31,7 @@ function prepare()
 }
 
 function BUILD_IMAGE() {
-    Docker_file=../.devcontainer/Dockerfile
+    Docker_file=.devcontainer/Dockerfile
     image_tag=limo_ros2:dev
     if [ $# -gt 2 ]
     then
@@ -46,7 +46,7 @@ function BUILD_IMAGE() {
 
 function start_image()
 {
-    image_tag=limo_ros2:dev
+
     image_tag=limo_ros2:dev
     if [ $# -gt 1 ] 
     then
@@ -63,7 +63,7 @@ function start_image()
     
     docker run --network=host -d -v /dev:/dev --privileged --device-cgroup-rule="a *:* rmw" --volume=/tmp/.X11-unix:/tmp/.X11-unix -v ${XAUTH}:${XAUTH} -e XAUTHORITY=${XAUTH} --runtime nvidia --gpus=all -v ${PWD}/..:/workspace -w=/workspace --name limo_dev -e LIBGL_ALWAYS_SOFTWARE="1" -e DISPLAY=${DISPLAY} --restart=always image_tag ./setup.sh
     echo -e "${_GREEN} Container start success!${_NORMAL}"
-    echo -e "${_GREEN} Now you can now connect to the container via SSH by using 'ssh -p 10022 root@ip' the password is 'agx'${_NORMAL}"
+    echo -e "${_GREEN} Now you can now connect to the container by running command 7 ${_NORMAL}"
 
 }
 
@@ -119,7 +119,7 @@ function restore_image()
 
 PRINT_MENU
 
-prepare
+# prepare
 
 read CHOOSE
 
