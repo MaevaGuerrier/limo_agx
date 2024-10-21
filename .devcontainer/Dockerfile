@@ -1,4 +1,4 @@
-FROM ros:foxy as dev
+FROM ros:foxy
 
 ENV DEBIAN_FRONTEND=noninteractive
 
