@@ -19,8 +19,9 @@ function PRINT_MENU()
     echo -e "${_GREEN} 4.Delete Container${_NORMAL}"
     echo -e "${_GREEN} 5.Backup environment${_NORMAL}"
     echo -e "${_GREEN} 6.Restore environment${_NORMAL}"
+    echo -e "${_GREEN} 7.Attach interactive terminal${_NORMAL}"
     echo -e "${_BOLD}--------------------------${_NORMAL}"
-    echo -n "Your chose(1-6):"
+    echo -n "Your chose(1-7):"
 }
 
 function prepare()
@@ -45,40 +46,29 @@ function BUILD_IMAGE() {
 
 function start_image()
 {
-    image_tag = limo_ros2:dev
+    image_tag=limo_ros2:dev
     if [ $# -gt 1 ] 
     then
         image_tag=$1
     fi
 
     # give docker root user X11 permissions
-    sudo xhost +si:localuser:root
-
+    xhost +local:root
+    XAUTH=~/.Xauthority
     # enable SSH X11 forwarding inside container (https://stackoverflow.com/q/48235040)
-    XAUTH=/tmp/.docker.xauth
-    xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
-    chmod 777 $XAUTH
+    # XAUTH=/tmp/.docker.xauth
+    # xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+    # chmod 777 $XAUTH
     
-    docker run --network=host \
-        -d
-        -v=/dev:/dev \
-        --privileged \
-        --device-cgroup-rule="a *:* rmw" \
-        --volume=/tmp/.X11-unix:/tmp/.X11-unix \
-        -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH \
-        --runtime nvidia
-        --gpus=all \
-        -v=${PWD}/..:/workspace \
-        -w=/workspace \
-        --name limo_dev \
-        -e LIBGL_ALWAYS_SOFTWARE="1" \
-        -e DISPLAY=${DISPLAY} \
-        --restart=always \
-        image_tag \
-        ./setup.sh
+    docker run --network=host -d -v /dev:/dev --privileged --device-cgroup-rule="a *:* rmw" --volume=/tmp/.X11-unix:/tmp/.X11-unix -v ${XAUTH}:${XAUTH} -e XAUTHORITY=${XAUTH} --runtime nvidia --gpus=all -v ${PWD}/..:/workspace -w=/workspace --name limo_dev -e LIBGL_ALWAYS_SOFTWARE="1" -e DISPLAY=${DISPLAY} --restart=always image_tag ./setup.sh
     echo -e "${_GREEN} Container start success!${_NORMAL}"
     echo -e "${_GREEN} Now you can now connect to the container via SSH by using 'ssh -p 10022 root@ip' the password is 'agx'${_NORMAL}"
 
+}
+
+function attach_terminal()
+{
+    docker exec -it limo_dev /bin/bash
 }
 
 function backup_container()
@@ -134,7 +124,8 @@ read CHOOSE
 
 case "${CHOOSE}" in
     1)
-    BUILD_IMAGE
+    BUILD_IMAGE 
+    docker rm -f limo_dev
     start_image
     ;;
     2)
@@ -151,6 +142,9 @@ case "${CHOOSE}" in
     ;;
     6)
     restore_image
+    ;;
+    7)
+    attach_terminal
     ;;
 
 esac
