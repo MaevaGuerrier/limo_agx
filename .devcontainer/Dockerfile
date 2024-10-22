@@ -40,7 +40,7 @@ RUN echo "source /opt/ros/foxy/setup.bash" >> /etc/bash.bashrc
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
-   && apt-get -y install --no-install-recommends  ros-foxy-xacro ros-foxy-gazebo-ros ros-foxy-rviz2 ros-foxy-joint-state-publisher-gui\
+   && apt-get -y install --no-install-recommends  ros-foxy-xacro ros-foxy-gazebo* ros-foxy-rviz2* ros-foxy-joint-state-publisher-gui ros-foxy-teleop-twist-keyboard\
    #
    # Clean up
    && apt-get autoremove -y \

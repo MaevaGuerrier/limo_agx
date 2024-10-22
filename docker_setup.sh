@@ -61,7 +61,25 @@ function start_image()
     # xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
     # chmod 777 $XAUTH
     
-    docker run --network=host -d -v /dev:/dev --privileged --device-cgroup-rule="a *:* rmw" --volume=/tmp/.X11-unix:/tmp/.X11-unix -v ${XAUTH}:${XAUTH} -e XAUTHORITY=${XAUTH} --runtime nvidia --gpus=all -v ${PWD}/..:/workspace -w=/workspace --name limo_dev -e LIBGL_ALWAYS_SOFTWARE="1" -e DISPLAY=${DISPLAY} --restart=always image_tag ./setup.sh
+    docker run --network=host \
+                -d \
+                -v /dev:/dev \
+                --privileged \
+                --device-cgroup-rule="a *:* rmw" \
+                --volume=/tmp/.X11-unix:/tmp/.X11-unix -v ${XAUTH}:${XAUTH} \
+                -e XAUTHORITY=${XAUTH} \
+                --runtime nvidia --gpus=all \
+                -v ${PWD}:/workspace \
+                -w=/workspace \
+                --name limo_dev \
+                -e LIBGL_ALWAYS_SOFTWARE="1"\
+                -e DISPLAY=${DISPLAY} \
+                --restart=always image_tag  \
+                ./setup.sh
+    
+    
+    
+    
     echo -e "${_GREEN} Container start success!${_NORMAL}"
     echo -e "${_GREEN} Now you can now connect to the container by running command 7 ${_NORMAL}"
 
@@ -126,7 +144,11 @@ read CHOOSE
 case "${CHOOSE}" in
     1)
     BUILD_IMAGE 
-    docker rm -f limo_dev
+
+    # delete container if exist
+
+    docker stop limo_dev || true && docker rm limo_dev || true
+    
     start_image
     ;;
     2)
