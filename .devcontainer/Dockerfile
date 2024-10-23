@@ -1,4 +1,4 @@
-FROM ros:foxy
+FROM osrf/ros:noetic-desktop-focal
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -22,28 +22,73 @@ RUN apt-get update \
     ca-certificates \
     curl \
     swig \
+    wget \
     software-properties-common \
-    python3-pip \
+    python3-pip
+ 
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-desktop-full=1.5.0-1* \
+    ros-noetic-gazebo* ros-noetic-rviz \
+    tmux ros-noetic-teleop-twist-keyboard \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
-    mkdir -p YDLidar-SDK/build && \
-    cd YDLidar-SDK/build &&\
-    cmake ..&&\
-    make &&\
-    make install &&\
-    cd .. &&\
-    pip install . &&\
-    cd .. && rm -r YDLidar-SDK 
+# COPY 
+RUN pip install torch torchvision numpy matplotlib pyyaml
 
-RUN echo "source /opt/ros/foxy/setup.bash" >> /etc/bash.bashrc
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update \
-   && apt-get -y install --no-install-recommends  ros-foxy-xacro ros-foxy-gazebo* ros-foxy-rviz2* ros-foxy-joint-state-publisher-gui ros-foxy-teleop-twist-keyboard\
-   #
-   # Clean up
-   && apt-get autoremove -y \
-   && apt-get clean -y \
-   && rm -rf /var/lib/apt/lists/*
-ENV DEBIAN_FRONTEND=dialog  
+
+
+
+# Install miniconda
+# ENV CONDA_DIR /opt/conda
+# RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+#     /bin/bash ~/miniconda.sh -b -p /opt/conda 
+# ENV PATH=$CONDA_DIR/bin:$PATH
+
+
+# RUN conda env create -f drive-any-robot/deployment/environment.yml\
+    # conda activate gnm_deployment && \
+    # echo "conda activate gnm_deployment" >> ~/.bashrc && \
+    # pip install -e train/
+
+
+
+
+# RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
+#     mkdir -p YDLidar-SDK/build && \
+#     cd YDLidar-SDK/build &&\
+#     cmake ..&&\
+#     make &&\
+#     make install &&\
+#     cd .. &&\
+#     pip install . &&\
+#     cd .. && rm -r YDLidar-SDK 
+
+# RUN echo "source /opt/ros/foxy/setup.bash" >> /etc/bash.bashrc
+
+# ENV DEBIAN_FRONTEND=noninteractive
+# RUN apt-get update \
+#    && apt-get -y install --no-install-recommends ros-foxy-xacro ros-foxy-gazebo* ros-foxy-rviz2* ros-foxy-joint-state-publisher-gui ros-foxy-teleop-twist-keyboard\
+#    #
+#    # Clean up
+#    && apt-get autoremove -y \
+#    && apt-get clean -y \
+#    && rm -rf /var/lib/apt/lists/*
+# ENV DEBIAN_FRONTEND=dialog  
+
+
+
+
+# RUN echo "source /opt/ros/noetic/setup.bash" >> /etc/bash.bashrc
+
+# ros-foxy-ros1-bridge
+
+# # Install ROS 2 ROS 1 bridge
+# RUN echo "alias sr1='source /opt/ros/kinetic/setup.bash'" >> /etc/bash.bashrc
+# RUN echo "alias sr2='source /opt/ros/$distro/setup.bash'" >> /etc/bash.bashrc
+
+# RUN cd ~/ros1_ws; source /opt/ros/noetic/setup.bash; catkin_make
+# RUN cd ~/ros2_ws; source /opt/ros/foxy/setup.bash; colcon build
+
+# CMD ["bash"]

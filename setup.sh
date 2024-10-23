@@ -1,4 +1,6 @@
-source /opt/ros/foxy/setup.bash
+#!/bin/bash
+
+source /opt/ros/noetic/setup.bash
 
 apt update && apt -y install openssh-server
 echo root:"agx" | chpasswd

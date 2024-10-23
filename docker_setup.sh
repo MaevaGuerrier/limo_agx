@@ -41,7 +41,7 @@ function BUILD_IMAGE() {
     then
         Docker_file=$1
     fi
-    docker build --file $Docker_file --tag image_tag ..
+    docker build --file $Docker_file --tag image_tag  ..
 }
 
 function start_image()
