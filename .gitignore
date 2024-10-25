@@ -297,3 +297,9 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Project related 
+
+*.bag
+.catkin_workspace
+catkin_ws/src/CMakeLists.txt
