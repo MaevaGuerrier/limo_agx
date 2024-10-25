@@ -1,0 +1,24 @@
+name: vint_deployment
+channels:
+- pytorch
+- conda-forge
+dependencies:
+- python=3.8.5
+- cudatoolkit=11.0
+- torchvision
+- numpy
+- matplotlib
+- pyyaml
+# - rospkg
+- pip:
+  - wandb
+  - torch
+  - einops
+  - vit-pytorch
+  - defusedxml
+  - huggingface_hub==0.23.5
+  - efficientnet_pytorch
+  - warmup_scheduler
+  - diffusers==0.11.1
+  - "--target=/opt/ros/noetic/lib//limo/color/image_rawpython3/dist-packages rospkg"
+  - "--editable=git+https://github.com/real-stanford/diffusion_policy.git#egg=diffusion_policy"

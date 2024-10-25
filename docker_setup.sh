@@ -31,7 +31,7 @@ function prepare()
 }
 
 function BUILD_IMAGE() {
-    Docker_file=.devcontainer/Dockerfile
+    Docker_file=.devcontainer/
     image_tag=limo_ros2:dev
     if [ $# -gt 2 ]
     then
@@ -41,7 +41,7 @@ function BUILD_IMAGE() {
     then
         Docker_file=$1
     fi
-    docker build --file $Docker_file --tag image_tag  ..
+    docker build ${Docker_file} -t image_tag
 }
 
 function start_image()

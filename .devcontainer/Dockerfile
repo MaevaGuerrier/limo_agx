@@ -33,27 +33,27 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tmux ros-noetic-teleop-twist-keyboard \
     && rm -rf /var/lib/apt/lists/*
 
-# COPY 
-RUN pip install torch torchvision numpy matplotlib pyyaml
+# From requirement file of originial repo
+# RUN pip install torch torchvision numpy matplotlib pyyaml
 
 
-
+# RUN git clone https://github.com/real-stanford/diffusion_policy.git &&\
+#     pip install -e diffusion_policy/
 
 
 # Install miniconda
-# ENV CONDA_DIR /opt/conda
-# RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
-#     /bin/bash ~/miniconda.sh -b -p /opt/conda 
-# ENV PATH=$CONDA_DIR/bin:$PATH
+ENV CONDA_DIR /opt/conda
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p /opt/conda 
+ENV PATH=$CONDA_DIR/bin:$PATH
 
-
-# RUN conda env create -f drive-any-robot/deployment/environment.yml\
-    # conda activate gnm_deployment && \
-    # echo "conda activate gnm_deployment" >> ~/.bashrc && \
+COPY ./deployment_environment.yaml /tmp/deployment_environment.yaml  
+# RUN wget https://github.com/MaevaGuerrier/visualnav-transformer/blob/main/deployment/deployment_environment.yaml && \
+RUN conda env create -f /tmp/deployment_environment.yaml && \
+    conda init bash && \
+    # conda activate vint_deployment && \
+    echo "conda activate vint_deployment" >> ~/.bashrc
     # pip install -e train/
-
-
-
 
 # RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
 #     mkdir -p YDLidar-SDK/build && \
