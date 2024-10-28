@@ -51,9 +51,11 @@ COPY ./deployment_environment.yaml /tmp/deployment_environment.yaml
 # RUN wget https://github.com/MaevaGuerrier/visualnav-transformer/blob/main/deployment/deployment_environment.yaml && \
 RUN conda env create -f /tmp/deployment_environment.yaml && \
     conda init bash && \
-    # conda activate vint_deployment && \
     echo "conda activate vint_deployment" >> ~/.bashrc
     # pip install -e train/
+
+COPY ./setup.sh /tmp/setup.sh
+ENTRYPOINT ["/tmp/setup.sh"] 
 
 # RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
 #     mkdir -p YDLidar-SDK/build && \

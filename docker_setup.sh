@@ -74,9 +74,7 @@ function start_image()
                 --name limo_dev \
                 -e LIBGL_ALWAYS_SOFTWARE="1"\
                 -e DISPLAY=${DISPLAY} \
-                --restart=always image_tag  \
-                ./setup.sh
-    
+                --restart=always image_tag /bin/bash -c "echo 'Hello World'; sleep infinity"
     
     
     
@@ -87,7 +85,11 @@ function start_image()
 
 function attach_terminal()
 {
-    docker exec -it limo_dev /bin/bash
+    # give docker root user X11 permissions
+    # docker exec -it limo_dev /bin/bash
+    docker exec -it limo_dev /bin/bash -c "/tmp/setup.sh bash"
+    
+
 }
 
 function backup_container()
