@@ -49,13 +49,18 @@ ENV PATH=$CONDA_DIR/bin:$PATH
 
 COPY ./deployment_environment.yaml /tmp/deployment_environment.yaml  
 # RUN wget https://github.com/MaevaGuerrier/visualnav-transformer/blob/main/deployment/deployment_environment.yaml && \
-RUN conda env create -f /tmp/deployment_environment.yaml && \
-    conda init bash && \
+RUN conda env create -f /tmp/deployment_environment.yaml
+
+RUN conda init && \
     echo "conda activate vint_deployment" >> ~/.bashrc
     # pip install -e train/
 
+RUN echo "source /opt/ros/noetic/setup.bash " >> ~/.bashrc && \
+    echo "source /workspace/catkin_ws/devel/setup.bash " >> ~/.bashrc
+
+
 COPY ./setup.sh /tmp/setup.sh
-ENTRYPOINT ["/tmp/setup.sh"] 
+# ENTRYPOINT ["/tmp/setup.sh"] 
 
 # RUN git clone https://github.com/YDLIDAR/YDLidar-SDK.git &&\
 #     mkdir -p YDLidar-SDK/build && \

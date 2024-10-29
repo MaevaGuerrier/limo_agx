@@ -15,6 +15,7 @@ dependencies:
   - torch
   - einops
   - vit-pytorch
+  - rospkg
   - defusedxml
   - huggingface_hub==0.23.5
   - efficientnet_pytorch

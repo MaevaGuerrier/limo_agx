@@ -1,8 +1,10 @@
 #!/bin/bash
 
-source /opt/ros/noetic/setup.bash
-pip install --target=/opt/ros/noetic/lib/limo/color/image_rawpython3/dist-packages rospkg 
+source ~/.bashrc
 
+# pip install --upgrade --target=/opt/ros/noetic/lib/limo/color/image_rawpython3/dist-packages rospkg 
+# pip3 install rospkg
+# pip3 install -e /workspace/visualnav-transformer/deployment/src/train
 exec "$@"
 
 # apt update && apt -y install openssh-server
